@@ -1,0 +1,20 @@
+{
+  "name": "proyecto-casa",
+  "version": "0.0.0",
+  "description": "ProyectoCasa",
+  "main": "server.js",
+  "author": {
+    "name": "micha"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "connect-multiparty": "^2.1.0",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.0",
+    "jwt-simple": "^0.5.1",
+    "mongoose": "^4.13.7",
+    "mongoose-unique-validator": "^1.0.6",
+    "socket.io": "^2.0.4"
+  }
+}

@@ -1,0 +1,3 @@
+C:\Users\micha\documents\visual studio 2017\Projects\ProyectoCasa\ProyectoCasa\obj\Debug\ProyectoCasa.njsprojResolveAssemblyReference.cache
+C:\Users\micha\documents\visual studio 2017\Projects\ProyectoCasa\ProyectoCasa\obj\Debug\ProyectoCasa.njsproj.CoreCompileInputs.cache
+C:\Users\micha\documents\visual studio 2017\Projects\ProyectoCasa\ProyectoCasa\bin\Microsoft.NodejsTools.WebRole.dll
