@@ -44,6 +44,9 @@ app.get("/",function (req, res) {
 io.on("connection", function (socket) {
     console.log("Hola desde socketIO ");
     socket.emit("saludo","HOLA DESDE server")
+    socket.on("rpta",function (data){
+       console.log(data);
+   });
 })
 
 /*.createServer(function (req, res) {
