@@ -9,14 +9,15 @@ var mongoose =require("mongoose");
 var app = express();
 
 
-var server = http.createServer(app);
-var io = require("socket.io")(server);
+
+
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // configuration DB ===============================================================
+
 var configDB = require('./Config/database');
 mongoose.connect(configDB.url, { useMongoClient: true }, function (err) {
     if (err) {
@@ -28,7 +29,9 @@ mongoose.connect(configDB.url, { useMongoClient: true }, function (err) {
 var routes= require("./App/Routes");
 routes.assignRoutes(app);
 
-app.listen(port);
+var server = app.listen(port);
+var io = require("socket.io")(server);
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
@@ -41,13 +44,16 @@ app.use((req, res, next) => {
 app.get("/",function (req, res) {
     res.send("Hola");
 })
-io.on("connection", function (socket) {
+io.on("connection",  (socket)=> {
     console.log("Hola desde socketIO ");
     socket.emit("saludo","HOLA DESDE server")
-    socket.on("rpta",function (data){
+    socket.on("rpta", (data)=>{
        console.log(data);
    });
 })
+
+
+
 
 /*.createServer(function (req, res) {
     
