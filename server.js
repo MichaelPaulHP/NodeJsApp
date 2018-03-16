@@ -19,9 +19,13 @@ app.use(bodyParser.json());
 // configuration DB ===============================================================
 
 var configDB = require('./Config/database');
-mongoose.connect(configDB.url, { useMongoClient: true }, function (err) {
+mongoose.connect(configDB.url, {
+    useMongoClient:true,
+    user:configDB.user,
+    pass:configDB.pass},
+    function (err) {
     if (err) {
-        console.log(err.message);
+        console.log("ERROR MongoDB: "+err.message);
     }
 }); // connect to our database
 
