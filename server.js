@@ -45,6 +45,10 @@ app.use((req, res, next) => {
  
     next();
 });
+
+var cantUsers=0;
+
+var publicKeys;
 app.get("/",function (req, res) {
     res.send("Hola");
 })
@@ -54,6 +58,23 @@ io.on("connection",  (socket)=> {
     socket.on("rpta", (data)=>{
        console.log(data);
    });
+   socket.on("newKey",(data)=>{
+        publicKeys = data.publicKey;
+        cantUsers++;
+        
+        socket.emit("getUsers",cantUsers)
+        if(cantUsers==2){
+            socket.emit("getpublicKey",publicKeys);       
+        }
+        
+   })
+   socket.on("newMessage",(data)=>{
+
+       socket.emit("newMessage",data);
+
+   });
+
+
 })
 
 
