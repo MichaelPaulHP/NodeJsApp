@@ -51,57 +51,87 @@ class User{
         this.id=id;
         this.publicKey=publicKey;
     }
-    get id(){
+    getId(){
         return this.id;
     }
-    get publicKey(){
+    getPublicKey(){
         return this.publicKey;
     }
 
 }
 console.log("GG!");
 var cantUsers=0;
-
-var users={};
+var firstUser;
+var users=new Array();
 app.get("/",function (req, res) {
     res.send("Hola");
 })
 io.on("connection",  (socket)=> {
     console.log("new connection ");
     ++cantUsers;
-    console.log(cantUsers);
-   socket.on("newKey",(data)=>{
-       users.push(new User(socket.id,data));
+    console.log("users:"+cantUsers);
+    io.sockets.emit("newUser",cantUsers) // enviar a todos
+    //socket.broadcast.emit("newUser",{cantUsers}); // enviar cantidad de usuarios
 
-       socket.emit("getUsers",cantUsers);// envia rla cantidad de usuarios
-        if(cantUsers==2){
-            // envar la keypublic del Receptor
-
-            socket.emit("getpublicKey",buscarReceptor);       
-        }
-
+    socket.on("infoNewUser",(data)=>{
+        //data: {"id":$socket.id,"publicKey":$myKeyPublic}
+          
         
-   })
-   socket.on("newMessage",(data)=>{
-       //  
-       socket.emit("newMessage",data);
+        console.log(data.id);
 
+        if(cantUsers<=2){
+            if(cantUsers==1){
+                users.push(data);
+            }
+            else{// enviar el primer user
+                socket.emit("infoNewUser",users[0]);//envar  rpimer user
+                socket.broadcast.emit("infoNewUser",data);
+                users.push(data)     
+            }
+        }
+        else{
+            
+            socket.broadcast.emit("infoNewUser",data);
+            for (var i=0;i<users.length;i++){
+                socket.emit("infoNewUser",users[i]);// uno pr uno
+            }
+            //socket.emit("infoNewUser",users);// enviando lista
+            users.push(data) 
+        }
+        // solo para el primer user
+        /*if(cantUsers<=2){
+            if(cantUsers==1){
+                firstUser = data;
+            }
+            else{// enviar el primer user
+                socket.emit("infoNewUser",firstUser)// rpimer user
+                socket.broadcast.emit("infoNewUser",data);     
+            }
+        }
+        else{socket.broadcast.emit("infoNewUser",data);}*/
+
+             
+    });
+   socket.on("newMessage",(data)=>{
+       console.log("message to "+data.to)
+       socket.broadcast.to(data.to).emit('newMessage', {"message":data.message});
    });
    socket.on("disconnect",()=>{
         --cantUsers;
+        console.log("users:"+cantUsers);
         socket.emit("getUsers",cantUsers);
    });
 
 })
 
-var buscarReceptor = function (id){
-    if (users[0].id==id){
-        return users[0].publicKey;
+/*var buscarReceptor = function (id){
+    if (users[0].getId==id){
+        return users[0].getPublicKey;
     }
     else{
-        return users[1].publicKey;
+        return users[1].getPublicKey;
     }
-}
+}*/
 
 
 /*.createServer(function (req, res) {
