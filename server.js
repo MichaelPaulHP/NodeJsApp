@@ -118,7 +118,13 @@ io.on("connection",  (socket)=> {
    });
    socket.on("disconnect",()=>{
         --cantUsers;
-        console.log("users:"+cantUsers);
+         var a =users.findIndex(x=> x.id===socket.id);
+        
+        console.log("disconect: "+socket.id)
+        console.log("delete "+a+" -> "+users[a].id);
+        users.splice(a,1);
+        console.log("users: "+users.length);
+        socket.broadcast.emit("disconected",socket.id)
         socket.emit("getUsers",cantUsers);
    });
 
