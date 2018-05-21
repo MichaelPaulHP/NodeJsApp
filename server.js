@@ -114,7 +114,7 @@ io.on("connection",  (socket)=> {
     });
    socket.on("newMessage",(data)=>{
        console.log("message to "+data.to)
-       socket.broadcast.to(data.to).emit('newMessage', {"message":data.message});
+       socket.broadcast.to(data.to).emit('newMessage', data.message);
    });
    socket.on("disconnect",()=>{
         --cantUsers;
@@ -125,7 +125,7 @@ io.on("connection",  (socket)=> {
         users.splice(a,1);
         console.log("users: "+users.length);
         socket.broadcast.emit("disconected",socket.id)
-        socket.emit("getUsers",cantUsers);
+        //socket.emit("getUsers",cantUsers);
    });
 
 })
