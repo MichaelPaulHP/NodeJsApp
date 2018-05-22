@@ -112,6 +112,7 @@ io.on("connection",  (socket)=> {
         users.splice(a,1);
         console.log("usersSaved: "+users.length+" cantUser: "+cantUsers);
         socket.broadcast.emit("disconected",socket.id)
+        io.sockets.emit("newUser",cantUsers);
         //socket.emit("getUsers",cantUsers);
    });
 
