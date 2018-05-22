@@ -69,16 +69,14 @@ app.get("/",function (req, res) {
 io.on("connection",  (socket)=> {
     console.log("new connection ");
     ++cantUsers;
-    console.log("users:"+cantUsers);
-    io.sockets.emit("newUser",cantUsers) // enviar a todos
+    console.log("sockedId: "+socket.id);
+    io.sockets.emit("newUser",cantUsers); // enviar a todos
     //socket.broadcast.emit("newUser",{cantUsers}); // enviar cantidad de usuarios
 
     socket.on("infoNewUser",(data)=>{
         //data: {"id":$socket.id,"publicKey":$myKeyPublic}
+        console.log("userToSave: "+data.id);
           
-        
-        console.log(data.id);
-
         if(cantUsers<=2){
             if(cantUsers==1){
                 users.push(data);
@@ -98,32 +96,21 @@ io.on("connection",  (socket)=> {
             //socket.emit("infoNewUser",users);// enviando lista
             users.push(data) 
         }
-        // solo para el primer user
-        /*if(cantUsers<=2){
-            if(cantUsers==1){
-                firstUser = data;
-            }
-            else{// enviar el primer user
-                socket.emit("infoNewUser",firstUser)// rpimer user
-                socket.broadcast.emit("infoNewUser",data);     
-            }
-        }
-        else{socket.broadcast.emit("infoNewUser",data);}*/
-
-             
+        console.log("UsersSaved: "+users.length);
+        
     });
    socket.on("newMessage",(data)=>{
-       console.log("message to "+data.to)
-       socket.broadcast.to(data.to).emit('newMessage', data.message);
+       console.log("message from:"+socket.id+" to "+data.to)
+       socket.broadcast.to(data.to).emit('newMessage', {"message":data.message,"from":socket.id});
    });
    socket.on("disconnect",()=>{
-        --cantUsers;
-         var a =users.findIndex(x=> x.id===socket.id);
         
+         var a =users.findIndex(x=> x.id===socket.id);
+        --cantUsers;
         console.log("disconect: "+socket.id)
         //console.log("delete "+a+" -> "+users[a].id);
         users.splice(a,1);
-        console.log("users: "+users.length);
+        console.log("usersSaved: "+users.length+" cantUser: "+cantUsers);
         socket.broadcast.emit("disconected",socket.id)
         //socket.emit("getUsers",cantUsers);
    });
