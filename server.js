@@ -103,6 +103,10 @@ io.on("connection",  (socket)=> {
        console.log("message from:"+socket.id+" to "+data.to)
        socket.broadcast.to(data.to).emit('newMessage', {"message":data.message,"from":socket.id});
    });
+   socket.on("reset",()=>{
+        cantUsers=0;     
+        users=new Array();
+   });
    socket.on("disconnect",()=>{
         
          var a =users.findIndex(x=> x.id===socket.id);
@@ -117,7 +121,11 @@ io.on("connection",  (socket)=> {
    });
 
 })
-
+/*var insertUser = function (user){
+    if (!(users.find(x => x.id == user.id))){
+        users.push(user);
+    }
+}*/
 /*var buscarReceptor = function (id){
     if (users[0].getId==id){
         return users[0].getPublicKey;
