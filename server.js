@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 // configuration DB ===============================================================
 
-/*var configDB = require('./Config/database');
+var configDB = require('./Config/database');
 mongoose.connect(configDB.url, {
     useMongoClient:true,
     user:configDB.user,
@@ -28,11 +28,14 @@ mongoose.connect(configDB.url, {
         console.log("ERROR MongoDB: "+err.message);
     }
 }); // connect to our database
-*/
+
+
+
+
 //Routes ==============================================================
-/*var routes= require("./App/Routes");
+var routes= require("./App/Routes");
 routes.assignRoutes(app);
-*/
+
 var server = app.listen(port);
 var io = require("socket.io")(server);
 
@@ -45,6 +48,20 @@ app.use((req, res, next) => {
  
     next();
 });
+
+// save products
+var savefromCSV = require("./App/Services/saveProductoFromCSV");
+
+var pathFileProducts="./Uploads/csv/7004_1.csv";
+savefromCSV.saveProductFromCSV(pathFileProducts);
+
+
+
+
+
+
+
+
 
 class User{
     constructor(id,publicKey){
@@ -121,6 +138,7 @@ io.on("connection",  (socket)=> {
    });
 
 })
+
 /*var insertUser = function (user){
     if (!(users.find(x => x.id == user.id))){
         users.push(user);

@@ -10,9 +10,11 @@ app.use("/api", user_routes);*/
 
 var userRoute = require("./Routes/User");
 var roleRoute = require("./Routes/Role");
+var productRoute = require("./Routes/Product");
 exports.assignRoutes = function (app) {
     // user Routes
     app.use('/user', userRoute);
     // role rputes
     app.use('/role', roleRoute);
+    app.use('/role', productRoute);
 }
